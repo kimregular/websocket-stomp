@@ -1,6 +1,6 @@
 package com.example.chatserver.chat.controller;
 
-import com.example.chatserver.chat.dto.ChatMessageRequest;
+import com.example.chatserver.chat.dto.ChatMessageDto;
 import com.example.chatserver.chat.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,8 +29,8 @@ public class StompController {
     // 방법2 messageMapping 어노테이션만 활용
     @MessageMapping("/{roomId}")
     @SendTo("/topic/{roomId}")
-    public void sendMessage(@DestinationVariable Long roomId, ChatMessageRequest chatMessageRequest) {
-        chatService.save(roomId, chatMessageRequest);
-        messagingTemplate.convertAndSend("/topic/" + roomId, chatMessageRequest);
+    public void sendMessage(@DestinationVariable Long roomId, ChatMessageDto chatMessageDto) {
+        chatService.save(roomId, chatMessageDto);
+        messagingTemplate.convertAndSend("/topic/" + roomId, chatMessageDto);
     }
 }
