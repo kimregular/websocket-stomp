@@ -1,0 +1,6 @@
+### socket message1
+WEBSOCKET ws://localhost:8080/connect
+
+
+### socket message2
+WEBSOCKET ws://localhost:8080/connect

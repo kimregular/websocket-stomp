@@ -1,0 +1,43 @@
+### Sign up
+POST http://localhost:8080/member/save
+Content-Type: application/json
+
+{
+  "email": "test@test.com",
+  "name": "tester",
+  "password": "123123123"
+}
+
+### LoginTest
+POST http://localhost:8080/member/doLogin
+Content-Type: application/json
+
+{
+  "email": "test2@test.com",
+  "password": "123123123"
+}
+
+### members
+GET http://localhost:8080/member/list
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NTIyMDgxMTMsImV4cCI6MTc1MjM4ODExM30.I_82B0YnVK1dPYRtDzfqOBWEijxrD-rT9AU3pt7R4GglZWcG5fwOqIRWKLT9vdtWpRyw-67xL93MrDuGL8ltPw
+
+### create group chat room
+POST http://localhost:8080/chat/room/group/create?roomName=testRoom
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NTIyMDgxMTMsImV4cCI6MTc1MjM4ODExM30.I_82B0YnVK1dPYRtDzfqOBWEijxrD-rT9AU3pt7R4GglZWcG5fwOqIRWKLT9vdtWpRyw-67xL93MrDuGL8ltPw
+
+### chat rooms
+GET http://localhost:8080/chat/room/group/list
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NTIyMTA2MTYsImV4cCI6MTc1MjM5MDYxNn0.Qcz2LCXQkjiV86xHMKaOfBy5EGwe0idrTy-mBPmAO-mmuV-YHawfbiBnTS_6Ux5ixea94DTkoFCwvjBq3XQKPA
+
+### join room 1
+POST http://localhost:8080/chat/room/group/1/join
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MkB0ZXN0LmNvbSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzUyMjExMTAzLCJleHAiOjE3NTIzOTExMDN9.C7SRhI2E_1MvkTTJftx0cQMO5nHq-4eTDVRcMgyyVCkOlhVyAfKV1XU_CA6SVQXRBz-SxJ8SkCzS4H4pwJQWcQ
+
+### room 1 participants
+GET http://localhost:8080/chat/room/group/1/members
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NTIyMTA2MTYsImV4cCI6MTc1MjM5MDYxNn0.Qcz2LCXQkjiV86xHMKaOfBy5EGwe0idrTy-mBPmAO-mmuV-YHawfbiBnTS_6Ux5ixea94DTkoFCwvjBq3XQKPA

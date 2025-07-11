@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 34070628kjg@A
+    url: jdbc:mysql://localhost:3306/chatdb?useSSL=false&allowPublicKeyRetrieval=true
+  jpa:
+    database: mysql
+#    database-platform: org.hibernate.dialect.MySQL8Dialect
+    generate-ddl: true
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+
+jwt:
+  secretkey: 9U32mfRiGVsC3c8szHo8A5NicePt91KvhTjZqCOVWyj4R33OA+krvLAR17g51GUcu47/1CDpd9x9yRbIUcteRQ==
+  expiration: 3000
