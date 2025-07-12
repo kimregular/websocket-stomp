@@ -31,7 +31,8 @@ public class SecurityConfigs {
         http.authorizeHttpRequests(auth ->
                 auth.requestMatchers("/member/save",
                                 "/member/doLogin",
-                                "/connect/**"
+                                "/connect/**",
+                                "/chat/sse/unread"
                         ).permitAll()
                         .anyRequest().authenticated()
         );

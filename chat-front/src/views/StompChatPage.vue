@@ -4,6 +4,7 @@ import SockJS from 'sockjs-client';
 import Stomp from 'webstomp-client';
 import {onBeforeRouteLeave} from "vue-router";
 import {useRoute} from 'vue-router';
+import axios from "axios";
 
 const route = useRoute();
 const roomId = ref(null);
@@ -13,26 +14,29 @@ const newMessage = ref("");
 const chatBoxRef = ref(null);
 
 const stompClient = ref(null);
-const token = ref(null);
+let token = null
 const senderEmail = ref("");
 
 // WebSocket 연결
 const connectWebsocket = () => {
-  if(stompClient.value && stompClient.value.connect) return;
+  if (stompClient.value && stompClient.value.connected) return;
 
   const sockJs = new SockJS(`${process.env.VUE_APP_API_BASE_URL}/connect`);
-  token.value = localStorage.getItem("token");
+  token = localStorage.getItem("token");
   stompClient.value = Stomp.over(sockJs);
-
-  stompClient.value.connect({
-        Authorization: `Bearer ${token.value}`,
-      },
+  stompClient.value.connect({Authorization: `Bearer ${token}`},
       () => {
         stompClient.value.subscribe(`/topic/${roomId.value}`, (message) => {
-          const parsedMessage = JSON.parse(message.body);
-          messages.value.push(parsedMessage);
-          scrollToBottom();
-        });
+              const parsedMessage = JSON.parse(message.body);
+              messages.value.push(parsedMessage);
+              scrollToBottom();
+            },
+            {Authorization: `Bearer ${token}`});
+      },
+      (error) => {
+        console.log("disconnected");
+        console.log(error)
+        stompClient.value = null;
       }
   );
 };
@@ -41,6 +45,12 @@ const connectWebsocket = () => {
 const sendMessage = () => {
   if (!newMessage.value.trim()) {
     newMessage.value = "";
+    return;
+  }
+
+  // WebSocket 연결 확인
+  if (!stompClient.value || !stompClient.value.connected) {
+    console.warn("WebSocket이 연결되지 않았습니다.");
     return;
   }
 
@@ -61,17 +71,20 @@ const scrollToBottom = () => {
   })
 }
 
-const disconnectWebSocket = () => {
-  if(stompClient.value && stompClient.value.connect) {
+const disconnectWebSocket = async () => {
+  await axios.post(`${process.env.VUE_APP_API_BASE_URL}/chat/room/${roomId.value}/read`)
+  if (stompClient.value && stompClient.value.connect) {
     stompClient.value.unsubscribe(`/topic/${roomId.value}`);
     stompClient.value.disconnect();
   }
 }
 
 // 컴포넌트 마운트 시 WebSocket 연결
-onBeforeMount(() => {
-  roomId.value = route.params.roomId;
+onBeforeMount(async () => {
   senderEmail.value = localStorage.getItem("email");
+  roomId.value = route.params.roomId;
+  const response = await axios.get(`${process.env.VUE_APP_API_BASE_URL}/chat/history/${roomId.value}`);
+  messages.value = response.data;
   connectWebsocket()
 });
 
@@ -81,7 +94,7 @@ onBeforeRouteLeave((from, to, next) => {
 })
 
 // 연결 종료 시 클린업
-onBeforeUnmount( () => {
+onBeforeUnmount(() => {
   disconnectWebSocket()
 });
 </script>
@@ -99,7 +112,7 @@ onBeforeUnmount( () => {
                   :key="index"
                   :class="['chat-message', msg.senderEmail === senderEmail ? 'sent' : 'received']"
               >
-                <strong>{{msg.senderEmail}}:</strong> {{msg.message}}
+                <strong>{{ msg.senderEmail }}:</strong> {{ msg.message }}
               </div>
             </div>
             <v-text-field

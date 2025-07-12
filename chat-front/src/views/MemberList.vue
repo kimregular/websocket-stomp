@@ -2,8 +2,16 @@
 
 import {onBeforeMount, ref} from "vue";
 import axios from "axios";
+import router from "@/router";
 
 const memberList = ref()
+
+const startChat = async (memberId) => {
+  // 기존 채팅방이 있으면 return 받고 없으면 새로 생성
+  const response = await axios.post(`${process.env.VUE_APP_API_BASE_URL}/chat/room/private/create?otherMemberId=${memberId}`);
+  const roomId = response.data;
+  router.push(`/chatpage/${roomId}`);
+}
 onBeforeMount(async () => {
   const response = await axios.get(`${process.env.VUE_APP_API_BASE_URL}/member/list`);
   memberList.value = response.data;
@@ -34,7 +42,7 @@ onBeforeMount(async () => {
                 <th>{{member.name}}</th>
                 <th>{{member.email}}</th>
                 <td>
-                  <v-btn>채팅하기</v-btn>
+                  <v-btn color="primary" @click="startChat(member.id)">채팅하기</v-btn>
                 </td>
               </tr>
               </tbody>

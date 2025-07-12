@@ -20,7 +20,7 @@ Content-Type: application/json
 ### members
 GET http://localhost:8080/member/list
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NTIyMDgxMTMsImV4cCI6MTc1MjM4ODExM30.I_82B0YnVK1dPYRtDzfqOBWEijxrD-rT9AU3pt7R4GglZWcG5fwOqIRWKLT9vdtWpRyw-67xL93MrDuGL8ltPw
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MkB0ZXN0LmNvbSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzUyMzA4NDk4LCJleHAiOjE3NTI0ODg0OTh9.gxKpaFDZImEcCKv0oZgXz_UmkpCstR7uJ1P0k1jIZsxslJGHuDcZeKISJltF1wW-PP-iFIK3u7dzjU2tHKXMpQ
 
 ### create group chat room
 POST http://localhost:8080/chat/room/group/create?roomName=testRoom

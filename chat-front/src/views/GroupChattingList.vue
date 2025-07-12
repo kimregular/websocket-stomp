@@ -16,6 +16,7 @@ const createChatRoom = async () => {
   await axios.post(`${process.env.VUE_APP_API_BASE_URL}/chat/room/group/create?roomName=${newRoomTitle.value}`, null);
   showCreateRoomModal.value = false;
   await loadChatRoom();
+  window.location.reload();
 };
 const loadChatRoom = async () => {
   return axios.get(`${process.env.VUE_APP_API_BASE_URL}/chat/room/group/list`);

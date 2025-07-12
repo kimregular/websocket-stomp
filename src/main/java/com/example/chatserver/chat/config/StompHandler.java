@@ -40,7 +40,8 @@ public class StompHandler implements ChannelInterceptor {
                     .parseClaimsJws(token)
                     .getBody();
             log.info("토큰 검증 완료");
-        }else if(StompCommand.SUBSCRIBE == accessor.getCommand()) {
+        }
+        if(StompCommand.SUBSCRIBE == accessor.getCommand()) {
             log.info("subscribe to stomp server");
             String bearerToken = accessor.getFirstNativeHeader("Authorization");
             String token = bearerToken.substring(7);
