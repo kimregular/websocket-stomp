@@ -2,6 +2,9 @@ package com.example.chatserver.chat.controller;
 
 import com.example.chatserver.chat.dto.ChatMessageDto;
 import com.example.chatserver.chat.service.ChatService;
+import com.example.chatserver.chat.service.RedisPubSubService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -17,6 +20,7 @@ public class StompController {
 
     private final SimpMessageSendingOperations messagingTemplate;
     private final ChatService chatService;
+    private final RedisPubSubService redisPubSubService;
 
     // 방법1 MessageMapping과 sendTo 한번에 처리
 //    @MessageMapping("/{roomId}") // 클라이언트에서 특정 publish/roomId 형태로 메시지를 발행시 messageMapping 수신
@@ -29,8 +33,12 @@ public class StompController {
     // 방법2 messageMapping 어노테이션만 활용
     @MessageMapping("/{roomId}")
     @SendTo("/topic/{roomId}")
-    public void sendMessage(@DestinationVariable Long roomId, ChatMessageDto chatMessageDto) {
+    public void sendMessage(@DestinationVariable Long roomId, ChatMessageDto chatMessageDto) throws JsonProcessingException {
         chatService.save(roomId, chatMessageDto);
-        messagingTemplate.convertAndSend("/topic/" + roomId, chatMessageDto);
+        chatMessageDto.setRoomId(roomId);
+//        messagingTemplate.convertAndSend("/topic/" + roomId, chatMessageDto);
+        ObjectMapper mapper = new ObjectMapper();
+        String message = mapper.writeValueAsString(chatMessageDto);
+        redisPubSubService.publish("chat", message);
     }
 }

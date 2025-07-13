@@ -133,7 +133,7 @@ public class ChatService {
         return chatMessageRepository
                 .findByChatRoomOrderByCreatedAt(chatRoom)
                 .stream()
-                .map(c -> new ChatMessageDto(c.getContent(), c.getMember().getEmail()))
+                .map(c -> new ChatMessageDto(chatRoom.getId(), c.getContent(), c.getMember().getEmail()))
                 .toList();
     }
 
